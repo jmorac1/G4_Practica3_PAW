@@ -1,50 +1,123 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MVC_Practica3</title>
-    <script type="importmap"></script>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Práctica 3</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MVC_Practica3.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/core.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/theme-default.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/perfect-scrollbar.css" />
+
+    <script src="~/lib/bootstrap/dist/js/helpers.js"></script>
+    <script src="~/lib/bootstrap/dist/js/config.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+    @RenderSection("Head", required: false)
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC_Practica3</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a asp-controller="Home" asp-action="Index"
+                           class="app-brand-link d-flex align-items-center gap-2 py-2">
+                        <img src="~/lib/bootstrap/dist/img/logo.png"
+                             alt="Practica2"
+                             style="height:32px; display:block;"
+                             class="align-self-center" />
+                        <span class="app-brand-text demo menu-text fw-bolder">
+                            Práctica 3
+                        </span>
+                    </a>
+
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1">
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Menú</span>
+                    </li>
+
+                    <li class="menu-item">
+                        <a asp-controller="Home" asp-action="Consulta" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-book-add"></i>
+                            <div>Consultar Compras</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a asp-controller="Home" asp-action="RegistrarPago" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-library"></i>
+                            <div>Registrar Pago</div>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <div class="layout-page">
+
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                     id="layout-navbar">
+
+                    <div class="d-flex align-items-center" style="width: 56px;">
+                        <a class="nav-item nav-link px-0 d-xl-none" href="javascript:void(0)">
+                            <i class="bx bx-menu bx-sm"></i>
+                        </a>
+                    </div>
+
+                    <div class="flex-grow-1 d-flex justify-content-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="~/lib/bootstrap/dist/img/logo.png" alt="Logo" style="height:45px; display:block;" />
+                            <span class="fw-bold fs-4 text-primary mb-0">Práctica 3</span>
+                        </div>
+                    </div>
+
+ 
+                    <div class="d-flex align-items-center justify-content-end" style="width: 56px;">
+                    </div>
+
+                </nav>
+
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        @RenderBody()
+                    </div>
+
+                    <footer class="content-footer footer bg-footer-theme text-center">
+                        <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                            <div class="mb-2 mb-md-0 text-center">
+                                © @DateTime.Now.Year, Practica 3
+                            </div>
+                        </div>
+                    </footer>
+
+                    <div class="content-backdrop fade"></div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
+
+        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - MVC_Practica3 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/lib/bootstrap/dist/js/popper.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/bootstrap/dist/js/perfect-scrollbar.js"></script>
+    <script src="~/lib/bootstrap/dist/js/menu.js"></script>
+    <script src="~/lib/bootstrap/dist/js/main.js"></script>
+    
+    @RenderSection("Scripts", required: false)
 </body>
+
 </html>

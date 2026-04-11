@@ -1,25 +1,33 @@
 using Microsoft.AspNetCore.Mvc;
 using MVC_Practica3.Models;
-using System.Diagnostics;
 
 namespace MVC_Practica3.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IHttpClientFactory _http;
+        private readonly IConfiguration _config;
+
+        public HomeController(IHttpClientFactory http, IConfiguration config)
+        {
+            _http = http;
+            _config = config;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public async Task<IActionResult> Consulta()
         {
-            return View();
-        }
+            var client = _http.CreateClient();
+            var baseUrl = _config.GetValue<string>("Valores:UrlAPI");
+            var url = baseUrl + "Home/ConsultarCompras";
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var lista = await client.GetFromJsonAsync<List<CompraConsulta>>(url);
+            return View(lista ?? new List<CompraConsulta>());
         }
     }
 }
