@@ -73,3 +73,42 @@ BEGIN
         Id_Compra
 END
 GO
+
+
+
+CREATE OR ALTER PROCEDURE SP_RegistrarAbono
+    @Id_Compra BIGINT,
+    @Monto     DECIMAL(18,2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Abonos (Id_Compra, Monto, Fecha)
+    VALUES (@Id_Compra, @Monto, GETDATE());
+
+    UPDATE Principal
+    SET Saldo = Saldo - @Monto
+    WHERE Id_Compra = @Id_Compra;
+
+    UPDATE Principal
+    SET Estado = 'Cancelado'
+    WHERE Id_Compra = @Id_Compra
+      AND Saldo <= 0;
+END
+GO
+
+CREATE OR ALTER PROCEDURE SP_ConsultarComprasPendientes
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT 
+        Id_Compra,
+        Descripcion,
+        Precio,
+        Saldo,
+        Estado
+    FROM Principal
+    WHERE Estado = 'Pendiente'
+    ORDER BY Id_Compra
+END
+GO
