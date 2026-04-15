@@ -17,14 +17,12 @@
             <form method="post" asp-action="Registro" asp-controller="Home"
                   id="formAbono">
 
-                {{!-- Fila: Compra + botón Consultar --}}
                 <div class="row mb-3 align-items-start">
                     <label class="col-sm-3 col-form-label fw-bold">Compra</label>
                     <div class="col-sm-6">
                         <select id="Id_Compra"
                                 name="Id_Compra"
                                 class="form-select"
-                                size="5"
                                 required>
                         </select>
                     </div>
@@ -36,7 +34,6 @@
                     </div>
                 </div>
 
-                {{!-- Fila: Saldo Anterior (solo lectura) --}}
                 <div class="row mb-3 align-items-center">
                     <label for="SaldoAnterior"
                            class="col-sm-3 col-form-label fw-bold">
@@ -50,7 +47,6 @@
                     </div>
                 </div>
 
-                {{!-- Fila: Abono --}}
                 <div class="row mb-3 align-items-center">
                     <label for="Monto"
                            class="col-sm-3 col-form-label fw-bold">
@@ -71,7 +67,6 @@
                     </div>
                 </div>
 
-                {{!-- Botón Abonar --}}
                 <div class="row mt-4">
                     <div class="col-sm-9 offset-sm-0">
                         <button type="submit"
@@ -88,103 +83,5 @@
 </div>
 
 @section Scripts {
-<script>
-    // Saldo actual cargado desde la API para validación
-    let saldoActual = 0;
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Al cargar la página: traer compras pendientes y llenar el <select>
-    // ─────────────────────────────────────────────────────────────────────────
-    $(document).ready(function () {
-        $.ajax({
-            url:  '/api-proxy/ComprasPendientes',
-            type: 'GET',
-            success: function (data) {
-                $.each(data, function (i, compra) {
-                    $('#Id_Compra').append(
-                        $('<option>', {
-                            value: compra.id_Compra,
-                            text:  compra.descripcion
-                        })
-                    );
-                });
-            },
-            error: function () {
-                alert('Error al cargar las compras pendientes.');
-            }
-        });
-    });
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Al cambiar la selección: cargar el saldo via Ajax
-    // ─────────────────────────────────────────────────────────────────────────
-    $('#Id_Compra').on('change', function () {
-        var id = $(this).val();
-
-        if (!id) {
-            saldoActual = 0;
-            $('#SaldoAnterior').val('');
-            $('#Monto').val('');
-            $('#errorAbono').addClass('d-none');
-            return;
-        }
-
-        $.ajax({
-            url:  '/api-proxy/SaldoCompra/' + id,
-            type: 'GET',
-            success: function (data) {
-                saldoActual = parseFloat(data.saldo);
-                $('#SaldoAnterior').val(saldoActual.toFixed(2));
-                $('#Monto').val('');
-                $('#errorAbono').addClass('d-none');
-            },
-            error: function () {
-                alert('Error al obtener el saldo de la compra seleccionada.');
-            }
-        });
-    });
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Validación en tiempo real mientras se escribe el abono
-    // ─────────────────────────────────────────────────────────────────────────
-    $('#Monto').on('input', function () {
-        var monto = parseFloat($(this).val());
-        if (!isNaN(monto) && monto > saldoActual) {
-            $('#errorAbono').removeClass('d-none');
-        } else {
-            $('#errorAbono').addClass('d-none');
-        }
-    });
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Validación final antes del submit (Form nativo)
-    // ─────────────────────────────────────────────────────────────────────────
-    $('#formAbono').on('submit', function (e) {
-        var id    = $('#Id_Compra').val();
-        var monto = parseFloat($('#Monto').val());
-
-        // Verificar que haya compra seleccionada
-        if (!id) {
-            e.preventDefault();
-            alert('Debe seleccionar una compra.');
-            return;
-        }
-
-        // Verificar monto válido
-        if (isNaN(monto) || monto <= 0) {
-            e.preventDefault();
-            alert('El abono debe ser un monto mayor a cero.');
-            return;
-        }
-
-        // Verificar que el abono no supere el saldo
-        if (monto > saldoActual) {
-            e.preventDefault();
-            $('#errorAbono').removeClass('d-none');
-            return;
-        }
-
-        // Si todo es válido, el form hace submit normalmente (POST)
-    });
-</script>
+    <script src="~/js/registro.js" asp-append-version="true"></script>
 }
